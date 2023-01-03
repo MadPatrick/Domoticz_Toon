@@ -301,8 +301,8 @@ class BasePlugin:
 
         if (len(toonInformation)==4):
             strToonInformation='No information received from Toon yet (%s)' % toonInformation['nextProgram']
-            if int(toonInformation['nextProgram']==-1):
-                strToonInformation="No program information available"
+            if int(toonInformation['nextProgram'])==-1:
+                strToonInformation="No program scheduled"
 
             if int(toonInformation['nextProgram'])==0:
                 strToonInformation="Progam is off"
