@@ -184,7 +184,9 @@ class BasePlugin:
         self.ia_ernt=paramList[3]
         self.ia_erlt=paramList[4]
 
-        Domoticz.Heartbeat(5)
+        #heartBeat = int(Parameters["SerialPort"]) # too bad, this doesn't work :(
+        heartBeat = 5
+        Domoticz.Heartbeat(heartBeat)
         return True
 
     def onStop(self):
