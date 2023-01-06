@@ -299,13 +299,25 @@ class BasePlugin:
             strCurrentSetpoint="%.1f" % currentSetpoint
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
             if strCurrentSetpoint == Parameters["Mode1"]:
-                UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
+                #UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
+		UpdateDevice(Unit=scene, nValue=0, sValue=programs[10])
             if strCurrentSetpoint == Parameters["Mode2"]:
-                UpdateDevice(Unit=scene, nValue=0, sValue=programs[2])
+                #UpdateDevice(Unit=scene, nValue=0, sValue=programs[2])
+		UpdateDevice(Unit=scene, nValue=0, sValue=programs[20])
             if strCurrentSetpoint == Parameters["Mode3"]:
-                UpdateDevice(Unit=scene, nValue=0, sValue=programs[1])
+                #UpdateDevice(Unit=scene, nValue=0, sValue=programs[1])
+		UpdateDevice(Unit=scene, nValue=0, sValue=programs[30])
             if strCurrentSetpoint == Parameters["Mode4"]:
-                UpdateDevice(Unit=scene, nValue=0, sValue=programs[0])
+                #UpdateDevice(Unit=scene, nValue=0, sValue=programs[0])
+		UpdateDevice(Unit=scene, nValue=0, sValue=programs[40])
+		
+#programs = ['40','30','20','10','50']
+#rPrograms = ['3','2','1','0','4']
+#strPrograms = ['Comfort', 'Home', 'Sleep', 'Away','Manual']
+#"Mode1" label="Temp Away " 
+#"Mode2" label="Temp Sleep "
+#"Mode3" label="Temp Home " width="50px" required="true" default="19.5" />
+#"Mode4" label="Temp Comfort " width="50px" required="true" default="20.0" />
 
         if (len(toonInformation)==4):
             strToonInformation='No information received from Toon yet (%s)' % toonInformation['nextProgram']
