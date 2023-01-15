@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.3" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.5" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.4
+        version: 1.4.5
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -33,8 +33,18 @@
         <param field="Mode5" label="P1 adresses user defined" width="200px" default="2.1;2.4;2.6;2.5;2.7" >
         <description><br/>Enter user defined P1 adresses separated by ';', example: 2.1;2.4;2.6;2.5;2.7</description>
         </param>
-        <param field="Mode1" label="Scene temp " width="200px" required="true" default="18.0;17.9;19.5;20.0" >
-        <description><br/>==== Scene configuration ==== default=18.0;17.9;19.5;20.0</description>
+        <param field="Mode1" label="Scene temp " width="200px" required="true" default="18.0;17.0;19.5;20.0" >
+        <description><br/>==== Scene configuration (default=18.0;17.9;19.5;20.0) ====</description>
+        </param>
+        <param field="Mode2" label="Heartbeat" width="50px" required="true" default="60" >
+        <description><br/>==== Refresh time  (default=60 sec) ====</description>
+        </param>
+        <param field = "Mode3" label="P1 data" width="100px">
+            <description><br/>==== Enable the P1 data (default=No) ====</description>
+            <options>
+                <option label="Yes" value="Yes"/>
+                <option label="No" value="No" default="true"/>
+            </options>
         </param>
     </params>
 </plugin>
@@ -138,6 +148,15 @@ class BasePlugin:
             Domoticz.Device(Name="Keteldruk", Unit=boilerPressure, TypeName="Pressure", Used=1).Create()
         if programInfo not in Devices:
             Domoticz.Device(Name="Programma info", Unit=programInfo, TypeName="Text", Used=1).Create()
+        if boilerState not in Devices:
+            burnerInfoOptions= {"LevelActions": "||", "LevelNames": "|Uit|CV|WW", "LevelOffHidden": "true", "SelectorStyle": "0"}
+            Domoticz.Device(Name="Ketelmode", Unit=boilerState, Image=15, TypeName="Selector Switch", Options=burnerInfoOptions, Used=1).Create()
+        if boilerModulation not in Devices:	
+            Domoticz.Device(Name="Ketel modulatie", Unit=boilerModulation, Type=243, Subtype=6, Used=1).Create()
+        if boilerSetPoint not in Devices:	
+            Domoticz.Device(Name="Ketel setpoint", Unit=boilerSetPoint, Type=80, Subtype=5, Used=1).Create()
+#        if RoomHumidity not in Devices:	
+#            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=81, Subtype=1, Used=1).Create()
         if gas not in Devices:
             Domoticz.Device(Name="Gas", Unit=gas, TypeName="Gas", Used=1).Create()
         if electricity not in Devices:
@@ -146,15 +165,6 @@ class BasePlugin:
             Domoticz.Device(Name="Opgewekte Electriciteit", Unit=genElectricity, TypeName="Usage", Used=1).Create()
         if p1electricity not in Devices:
             Domoticz.Device(Name="P1 Electriciteit", Unit=p1electricity, Type=250, Subtype=1, Used=1).Create()
-        if boilerState not in Devices:
-            burnerInfoOptions= {"LevelActions": "||", "LevelNames": "|Uit|CV|WW", "LevelOffHidden": "true", "SelectorStyle": "0"}
-            Domoticz.Device(Name="Ketelmode", Unit=boilerState, Image=15, TypeName="Selector Switch", Options=burnerInfoOptions, Used=1).Create()
-        if boilerModulation not in Devices:	
-            Domoticz.Device(Name="Ketel modulatie", Unit=boilerModulation, Type=243, Subtype=6, Used=1).Create()
-        if boilerSetPoint not in Devices:	
-            Domoticz.Device(Name="Ketel setpoint", Unit=boilerSetPoint, Type=80, Subtype=5, Used=1).Create()
-        if RoomHumidity not in Devices:	
-            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=81, Subtype=1, Used=1).Create()
 
         Domoticz.Debugging(2)
         DumpConfigToLog()
@@ -170,7 +180,7 @@ class BasePlugin:
 
         self.toonConnSetControl= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         
-        self.toonTSCinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
+#TSC         self.toonTSCinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         
         
         sceneList = Parameters["Mode1"].split(';')
@@ -197,7 +207,7 @@ class BasePlugin:
 
 
 
-        heartBeat = 20
+        heartBeat = int(Parameters['Mode2'])
         Domoticz.Heartbeat(heartBeat)
         return True
 
@@ -232,9 +242,9 @@ class BasePlugin:
             if (Connection == self.toonConnSetControl):
                 Domoticz.Debug("getConnSetControl created")
                 requestUrl=self.toonSetControlUrl
-            if (Connection == self.toonTSCinfo):
-                Domoticz.Debug("toonTSCinfo created")
-                requestUrl="/tsc/sensors"
+#TSC            if (Connection == self.toonTSCinfo):
+#TSC                 Domoticz.Debug("toonTSCinfo created")
+#TSC                 requestUrl="/tsc/sensors"
 
             Domoticz.Debug("Connecting to: "+Parameters["Address"]+":"+Parameters["Port"] + requestUrl)
             Connection.Send({"Verb":"GET", "URL":requestUrl, "Headers": headers})
@@ -352,16 +362,16 @@ class BasePlugin:
 
         return
         
-    def onMessagetoonTSCinfo(self, Connection, Response):	
-        Domoticz.Debug("onMessagetoonTSCinfo called")	
-        if 'humidity' in Response:	
-            humidity=float(Response['humidity'])	
-            strhumidity="%.1f" % humidity
-            strhumidity=str(Response['humidity']).split(".")
-            temperature=float(Response['temperature'])	
-            strtemperature="%.1f" % temperature
-            #UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strhumidity+";"+strtemperature)
-            UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity[0]+";0")
+#TSC     def onMessagetoonTSCinfo(self, Connection, Response):	
+#TSC         Domoticz.Debug("onMessagetoonTSCinfo called")	
+#TSC         if 'humidity' in Response:	
+#TSC             humidity=float(Response['humidity'])	
+#TSC             strhumidity="%.1f" % humidity
+#TSC            strhumidity=str(Response['humidity']).split(".")
+#TSC            temperature=float(Response['temperature'])	
+#TSC             strtemperature="%.1f" % temperature
+#TSC             #UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strhumidity+";"+strtemperature)
+#TSC             UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity[0]+";0")
 
         return
 
@@ -448,9 +458,9 @@ class BasePlugin:
                 Domoticz.Log("Something unexpected while onMessage: toonConnSetControl")
                 return
 
-            if (Connection==self.toonTSCinfo):	
-                Domoticz.Log("Something unexpected while onMessage: toonTSCinfo")
-                return
+#TSC            if (Connection==self.toonTSCinfo):	
+#TSC                Domoticz.Log("Something unexpected while onMessage: toonTSCinfo")
+#TSC                return
 
             Domoticz.Log("Unknown connection")
             return
@@ -480,8 +490,8 @@ class BasePlugin:
         if (Connection==self.toonConnZwaveInfo):
             self.onMessageZwaveInfo(Connection, Response)
 
-        if (Connection==self.toonTSCinfo):	
-            self.onMessagetoonTSCinfo(Connection, Response)
+#TSC        if (Connection==self.toonTSCinfo):	
+#TSC            self.onMessagetoonTSCinfo(Connection, Response)
 
         return
 
@@ -544,8 +554,8 @@ class BasePlugin:
         if (self.toonConnZwaveInfo.Connected()==False):
             self.toonConnZwaveInfo.Connect()
             
-        if (self.toonTSCinfo.Connected()==False):	
-            self.toonTSCinfo.Connect()
+#TSC        if (self.toonTSCinfo.Connected()==False):	
+#TSC            self.toonTSCinfo.Connect()
 
     def processScenesConfig(self, json_response):
         Domoticz.Debug("processing scenes config on data: "+str(json_response))
