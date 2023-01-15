@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.5" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.5b" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.5
+        version: 1.4.5b
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -34,13 +34,14 @@
         <description><br/>Enter user defined P1 adresses separated by ';', example: 2.1;2.4;2.6;2.5;2.7</description>
         </param>
         <param field="Mode1" label="Scene temp " width="200px" required="true" default="18.0;17.0;19.5;20.0" >
-        <description><br/>==== Scene configuration (default=18.0;17.9;19.5;20.0) ====</description>
+        <description><br/>Scene configuration (default=18.0;17.9;19.5;20.0)
+        <br/>Use the following order : Home;Sleep;Home;Comfort </description>
         </param>
         <param field="Mode2" label="Heartbeat" width="50px" required="true" default="60" >
-        <description><br/>==== Refresh time  (default=60 sec) ====</description>
+        <description><br/>Refresh time  (default=60 sec) </description>
         </param>
         <param field = "Mode3" label="P1 data" width="100px">
-            <description><br/>==== Enable the P1 data (default=No) ====</description>
+            <description><br/>Enable the P1 data (default=No) </description>
             <options>
                 <option label="Yes" value="Yes"/>
                 <option label="No" value="No" default="true"/>
