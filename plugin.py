@@ -3,7 +3,7 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.15" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.15" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
         version: 1.4.15
@@ -11,8 +11,14 @@
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
             <li>The rooted toon is directly queried via http json commands</li>
-            <li>Toon v1 P1_dev values: 2.1, 2.3, 2.5, 2.4 & 2.6</li>
-            <li>Toon v2 P1_dev values: 2.1, 2.4, 2.6, 2.5 & 2.7</li>
+            <li>Toon P1 data</li>
+            <li>Toon Gas data</li>
+            <li>Toon Setpoint</li>
+            <li>Toon Scenes</li>
+            <li>Toon Auto Program and Program info</li>
+            <li>Boiler pressure info</li>
+            <li>Boiler modulation info</li>
+            <li>Boiler mode</li>
         </ul>
         Get the internalAddress of the device via : http://TOONIP/hdrv_zwave?action=getDevices.json
        <br/>
@@ -20,10 +26,16 @@
     </description>
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="192.168.1.200" >
-        <description>==== general configuration ====</description>
+        <description>General configuration
+        <br/>IP address and port of your Toon device</description>
         </param>
-        <param field="Port" label="Port" width="50px" required="true" default="80" />
+        <param field="Port" label="Port" width="50px" required="true" default="80" >
+        </param>
         <param field="Mode6" label="Toon version" width="200px" required="true" >
+            <description><br/>Which Toon version is installed
+            <br/>Toon v1 P1_dev default values: 2.1, 2.3, 2.5, 2.4 & 2.6
+            <br/>Toon v2 P1_dev default values: 2.1, 2.4, 2.6, 2.5 & 2.7
+            <br/>Otherwise "user defined" and fill in your _dev values in below field</description>
             <options>
                 <option label="v1" value="v1"/>
                 <option label="v2" value="v2"  default="true" />
@@ -37,7 +49,7 @@
         <param field="Mode1" label="Scene temp " width="200px" required="true" default="18.0;17.0;19.5;20.0" >
         <description><br/>Scene configuration (default=18.0;17.0;19.5;20.0)
         <br/>The order is as follows:   Away;Sleep;Home;Comfort
-        <br/>Check on your Tone which temperature value corresponds to which Scene</description>
+        <br/>Check on your Toon which temperature value corresponds to which Scene</description>
         </param>
         <param field="Mode2" label="Refresh interval" width="100px">
             <options>
@@ -49,7 +61,8 @@
             </options>
         </param>
         <param field = "Mode3" label="P1 data" width="100px">
-            <description>Enable the P1 data</description>
+            <description><br/>Enable the P1 data
+            <br/>Power measurement consumed and returned (solar power)</description>
             <options>
                 <option label="Yes" value="Yes"/>
                 <option label="No" value="No" default="true"/>
