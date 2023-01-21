@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.13b" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.13" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.13b
+        version: 1.4.13
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -174,7 +174,7 @@ class BasePlugin:
         if boilerSetPoint not in Devices:	
             Domoticz.Device(Name="Ketel setpoint", Unit=boilerSetPoint, Type=80, Subtype=5, Used=0).Create()
         if RoomHumidity not in Devices:	
-            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=81, Subtype=1, Used=0).Create()
+            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=82, Subtype=1, Used=0).Create()
 
         if self.useZwave:
             if gas not in Devices:
@@ -398,10 +398,13 @@ class BasePlugin:
             strhumidity="%.1f" % humidity
 #            strhumidity=str(Response['humidity']).split(".")
 #            Domoticz.info("humidity: "+("%.1f" % Response['humidity']))
-#            temperature=float(Response['temperature'])
-#            strtemperature="%.1f" % temperature
-            #UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strhumidity+";"+strtemperature)
-            UpdateDevice(Unit=RoomHumidity, nValue=47, sValue=1)
+            temperature=float(Response['temperature'])
+            strtemperature="%.1f" % temperature
+#        if 'intensity' in Response:
+            intensity=float(Response['intensity'])/10
+            strintensity="%.0f" % intensity
+            UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strhumidity+";"+strtemperature+";"+strintensity)
+            #UpdateDevice(Unit=RoomHumidity, nValue=47, sValue=1)
 
         return
 
