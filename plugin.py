@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.14" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.15" externallink="https://www.domoticz.com/forum/viewtopic.php?f=34&t=34986">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.14
+        version: 1.4.15
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -397,12 +397,23 @@ class BasePlugin:
             strhumidity="%.1f" % humidity
             temperature=float(Response['temperature'])
             strtemperature="%.1f" % temperature
-            intensity=float(Response['intensity'])
-            if intensity > 20: intensity = 3
-            if intensity > 10: intensity = 1
-            if intensity < 10: intensity = 2
-            strintensity="%.0f" % intensity
-            UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity+";"+strintensity)
+            dewpoint = (temperature-((100-humidity)/5))
+            if dewpoint > 2: humstat = 2
+            if dewpoint > 5: humstat = 1
+            if dewpoint > 8: humstat = 0
+            if dewpoint > 10: humstat = 3
+            strhumstat="%.0f" % humstat
+            UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity+";"+strhumstat)
+            #UpdateDevice(Unit=RoomHumidity, nValue=47, sValue=1)
+            
+#TVOC: total volatile compounds (how bad is the air in your house poluted with other gases)
+#ECO2: equivalent CO2 
+#intensity: the light intensity of the surrounding of the toon
+### HUMSTAT            
+#0=Normal
+#1=Comfortable
+#2=Dry
+#3=Wet
 
         return
 
