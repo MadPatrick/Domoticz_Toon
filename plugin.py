@@ -192,8 +192,8 @@ class BasePlugin:
             Domoticz.Device(Name="Ketel modulatie", Unit=boilerModulation, Type=243, Subtype=6, Used=0).Create()
         if boilerSetPoint not in Devices:
             Domoticz.Device(Name="Ketel setpoint", Unit=boilerSetPoint, Type=80, Subtype=5, Used=0).Create()
-        if RoomHumidity not in Devices:
-            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=82, Subtype=1, Used=0).Create()
+        #TSC        if RoomHumidity not in Devices:
+        #TSC            Domoticz.Device(Name="Luchtvochtigheid", Unit=RoomHumidity, Type=82, Subtype=1, Used=0).Create()
 
         if self.useZwave:
             if gas not in Devices:
@@ -221,7 +221,7 @@ class BasePlugin:
 
         self.toonConnSetControl= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         
-        self.toonTSCinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
+        #TSC        self.toonTSCinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         
         self.toonSceneinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
 
@@ -282,9 +282,9 @@ class BasePlugin:
             if (Connection == self.toonConnSetControl):
                 Domoticz.Debug("getConnSetControl created")
                 requestUrl=self.toonSetControlUrl
-            if (Connection == self.toonTSCinfo):
-                Domoticz.Debug("toonTSCinfo created")
-                requestUrl="/tsc/sensors"
+        #TSC            if (Connection == self.toonTSCinfo):
+        #TSC                Domoticz.Debug("toonTSCinfo created")
+        #TSC                requestUrl="/tsc/sensors"
             if (Connection == self.toonSceneinfo):
                 Domoticz.Debug("toonSceneinfo created")
                 requestUrl="/hcb_config?action=getObjectConfigTree&package=happ_thermstat&internalAddress=thermostatStates"
@@ -413,21 +413,21 @@ class BasePlugin:
 
         return
         
-    def onMessagetoonTSCinfo(self, Connection, Response):	
-        Domoticz.Debug("onMessagetoonTSCinfo called")
-        if 'humidity' in Response:
-            humidity=float(Response['humidity'])
-            strhumidity="%.1f" % humidity
-            temperature=float(Response['temperature'])
-            strtemperature="%.1f" % temperature
-            dewpoint = (temperature-((100-humidity)/5))
-            if dewpoint > 2: humstat = 2
-            if dewpoint > 5: humstat = 1
-            if dewpoint > 8: humstat = 0
-            if dewpoint > 10: humstat = 3
-            strhumstat="%.0f" % humstat
-            UpdateDevice(Unit=RoomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity+";"+strhumstat)
-            #UpdateDevice(Unit=RoomHumidity, nValue=47, sValue=1)
+#TSC    def onMessagetoonTSCinfo(self, Connection, Response):	
+#TSC        Domoticz.Debug("onMessagetoonTSCinfo called")
+#TSC        if 'humidity' in Response:
+#TSC            humidity=float(Response['humidity'])
+#TSC            strhumidity="%.1f" % humidity
+#TSC            temperature=float(Response['temperature'])
+#TSC            strtemperature="%.1f" % temperature
+#TSC            dewpoint = (temperature-((100-humidity)/5))
+#TSC            if dewpoint > 2: humstat = 2
+#TSC            if dewpoint > 5: humstat = 1
+#TSC            if dewpoint > 8: humstat = 0
+#TSC            if dewpoint > 10: humstat = 3
+#TSC            strhumstat="%.0f" % humstat
+#TSC            UpdateDevice(Unit=roomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity+";"+strhumstat)
+
             #TVOC: total volatile compounds (how bad is the air in your house poluted with other gases)
             #ECO2: equivalent CO2 
             #intensity: the light intensity of the surrounding of the toon
@@ -437,7 +437,7 @@ class BasePlugin:
             #2=Dry
             #3=Wet
 
-        return
+#TSC        return
         
     def onMessagetoonSceneinfo(self, Connection, Response):	
         Domoticz.Debug("onMessagetoonSceneinfo called")
@@ -539,9 +539,9 @@ class BasePlugin:
             if (Connection==self.toonConnSetControl):
                 Domoticz.Log("Something unexpected while onMessage: toonConnSetControl")
                 return
-            if (Connection==self.toonTSCinfo):	
-                Domoticz.Log("Something unexpected while onMessage: toonTSCinfo")
-                return
+        #TSC            if (Connection==self.toonTSCinfo):	
+        #TSC                Domoticz.Log("Something unexpected while onMessage: toonTSCinfo")
+        #TSC                return
             if (Connection==self.toonSceneinfo):
                 Domoticz.Log("Something unexpected while onMessage: toonSceneinfo")
                 return
@@ -574,8 +574,8 @@ class BasePlugin:
         if (Connection==self.toonConnZwaveInfo):
             self.onMessageZwaveInfo(Connection, Response)
 
-        if (Connection==self.toonTSCinfo):	
-            self.onMessagetoonTSCinfo(Connection, Response)
+        #TSC        if (Connection==self.toonTSCinfo):
+        #TSC        self.onMessagetoonTSCinfo(Connection, Response)
             
         if (Connection==self.toonSceneinfo):
             self.onMessagetoonSceneinfo(Connection, Response)
@@ -643,9 +643,9 @@ class BasePlugin:
         if (Connection==self.toonConnSetControl):
             Domoticz.Debug("onDisconnect called: toonConnSetControl")
             return
-        if (Connection==self.toonTSCinfo):	
-            Domoticz.Debug("onDisconnect called: toonTSCinfo")
-            return
+        #TSC        if (Connection==self.toonTSCinfo):	
+        #TSC            Domoticz.Debug("onDisconnect called: toonTSCinfo")
+        #TSC            return
         if (Connection==self.toonSceneinfo):
             Domoticz.Log("onDisconnect called: toonSceneinfo")
             return
@@ -665,8 +665,8 @@ class BasePlugin:
             if (self.toonConnZwaveInfo.Connected()==False):
                 self.toonConnZwaveInfo.Connect()
             
-        if (self.toonTSCinfo.Connected()==False):	
-            self.toonTSCinfo.Connect()
+        #TSC        if (self.toonTSCinfo.Connected()==False):	
+        #TSC            self.toonTSCinfo.Connect()
             
         if (self.toonSceneinfo.Connected()==False):
             self.toonSceneinfo.Connect()
