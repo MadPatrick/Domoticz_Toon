@@ -154,10 +154,10 @@ class BasePlugin:
     ia_edlt=''
     ia_ernt=''
     ia_erlt=''
+    scene0=''
     scene1=''
     scene2=''
     scene3=''
-    scene4=''
 
     strToonInformation='Waiting for first communication with Toon'
 
@@ -226,11 +226,11 @@ class BasePlugin:
         self.toonSceneinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
 
         sceneList = Parameters["Mode1"].split(';')
-#        self.scene1=sceneList[0]
-#        self.scene2=sceneList[1]
-#        self.scene3=sceneList[2]
-#        self.scene4=sceneList[3]
-#        self.scenes = []
+        #self.scene0=sceneList[0]
+        #self.scene1=sceneList[1]
+        #self.scene2=sceneList[2]
+        #self.scene3=sceneList[3]
+        #self.scenes = []
         
         #Domoticz.Log(json.dumps(Parameters))
         if self.useZwave:
@@ -368,19 +368,19 @@ class BasePlugin:
             currentSetpoint=float(Response['currentSetpoint'])/100
             strCurrentSetpoint="%.1f" % currentSetpoint
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
-            if strCurrentSetpoint == self.scene1:
+            if strCurrentSetpoint == self.scene0:
                 UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
                 self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=3"
                 self.toonConnSetControl.Connect()
-            if strCurrentSetpoint == self.scene2:
+            if strCurrentSetpoint == self.scene1:
                 UpdateDevice(Unit=scene, nValue=0, sValue=programs[2])
                 self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=2"
                 self.toonConnSetControl.Connect()
-            if strCurrentSetpoint == self.scene3:
+            if strCurrentSetpoint == self.scene2:
                 UpdateDevice(Unit=scene, nValue=0, sValue=programs[1])
                 self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=1"
                 self.toonConnSetControl.Connect()
-            if strCurrentSetpoint == self.scene4:
+            if strCurrentSetpoint == self.scene3:
                 UpdateDevice(Unit=scene, nValue=0, sValue=programs[0])
                 self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=0"
                 self.toonConnSetControl.Connect()
@@ -444,12 +444,12 @@ class BasePlugin:
         if 'states' in Response:
             #this message contains the scenes
             Domoticz.Debug("onMessagetoonSceneinfo processing list of scenes")
-#            for state in Response['states']['state']:
-#                self.scenes[state['id'][0]] = int(state['tempValue'][0])
-            self.scene1='1800'
-            self.scene2='1700'
-            self.scene3='1900'
-            self.scene4='2000'
+            #for state in Response['states']['state']:
+            #self.scenes[state['id'][0]] = int(state['tempValue'][0])
+            self.scene0='1800'
+            self.scene1='1700'
+            self.scene2='1900'
+            self.scene3='2000'
 
         else:
         
