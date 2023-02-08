@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.17" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.18" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.17
+        version: 1.4.18
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -437,7 +437,6 @@ class BasePlugin:
         #TSC            if dewpoint > 10: humstat = 3
         #TSC            strhumstat="%.0f" % humstat
         #TSC            UpdateDevice(Unit=roomHumidity, nValue=0, sValue=strtemperature+";"+strhumidity+";"+strhumstat)
-
             #TVOC: total volatile compounds (how bad is the air in your house poluted with other gases)
             #ECO2: equivalent CO2 
             #intensity: the light intensity of the surrounding of the toon
@@ -446,7 +445,6 @@ class BasePlugin:
             #1=Comfortable
             #2=Dry
             #3=Wet
-
         #TSC        return
         
     def onMessageToonSceneinfo(self, Connection, Response):	
@@ -458,7 +456,8 @@ class BasePlugin:
                 Domoticz.Debug("id ="+ state["id"][0] + " Temp =" + state["tempValue"][0])
                 #self.scenes[int(state["id"][0])] = int(state["tempValue"][0])
                 self.scenes[int(state["tempValue"][0])] = int(state["id"][0])
-        else:        
+        else:
+
             Domoticz.Debug("message does not contain states info: "+str(Response))
         return
 
