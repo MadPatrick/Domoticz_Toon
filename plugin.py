@@ -371,7 +371,7 @@ class BasePlugin:
             strCurrentSetpoint="%.1f" % currentSetpoint
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
             try:
-                sceneNum = self.scene.index(currentSetpoint100)
+                sceneNum = self.scenes.index(currentSetpoint100)
             except ValueError:
                 return
             UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
@@ -448,10 +448,10 @@ class BasePlugin:
         #TSC        return
         
     def onMessageToonSceneinfo(self, Connection, Response):	
-        Domoticz.Debug("onMessagetoonSceneinfo called")
+        Domoticz.Debug("onMessageToonSceneinfo called")
         if 'states' in Response:
             #this message contains the scenes
-            Domoticz.Debug("onMessagetoonSceneinfo processing list of scenes")
+            Domoticz.Debug("onMessageToonSceneinfo processing list of scenes")
             for state in Response["states"][0]["state"]:
                 Domoticz.Debug("id ="+ state["id"][0] + " Temp =" + state["tempValue"][0])
                 #self.scenes[int(state["id"][0])] = int(state["tempValue"][0])
@@ -582,7 +582,7 @@ class BasePlugin:
         #TSC        self.onMessagetoonTSCinfo(Connection, Response)
             
         if (Connection==self.toonSceneinfo):
-            self.onMessagetoonSceneinfo(Connection, Response)
+            self.onMessageToonSceneinfo(Connection, Response)
             
         if Connection.Connected() == True:
             # try to disconnect after use to avoid overload on the Toon
