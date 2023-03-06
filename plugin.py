@@ -372,7 +372,7 @@ class BasePlugin:
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
             try:
                 sceneNum = self.scene.index(currentSetpoint100)
-            except valueError:
+            except ValueError:
                 return
             UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
             self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=3"
