@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.19" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.20" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.19
+        version: 1.4.20
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -455,7 +455,8 @@ class BasePlugin:
             for state in Response["states"][0]["state"]:
                 Domoticz.Debug("id ="+ state["id"][0] + " Temp =" + state["tempValue"][0])
                 #self.scenes[int(state["id"][0])] = int(state["tempValue"][0])
-                self.scenes[int(state["tempValue"][0])] = int(state["id"][0])
+                if int(state["tempValue"][0]) in self.scenes:
+                    self.scenes[int(state["tempValue"][0])] = int(state["id"][0])
         else:
 
             Domoticz.Debug("message does not contain states info: "+str(Response))
