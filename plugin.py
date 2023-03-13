@@ -373,7 +373,7 @@ class BasePlugin:
             try:
                 #sceneNum = self.scenes.index(currentSetpoint100)
                 sceneNum = self.scenes[currentSetpoint100]
-            except ValueError, IndexError:
+            except (ValueError, IndexError):
                 Domoticz.Debug("no scene found for setpoint "+str(currentSetpoint100))
                 return
             #UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
