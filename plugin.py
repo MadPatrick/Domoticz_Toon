@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.24" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.25" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.24
+        version: 1.4.25
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -365,15 +365,15 @@ class BasePlugin:
 
         if 'currentSetpoint' in Response:
             currentSetpoint100=int(Response['currentSetpoint'])
+            Domoticz.Debug("trying to match changed setpoint to a scene: setpoint: '"+str(currentSetpoint100)+"' scene list: "+str(self.scenes))
             currentSetpoint=float(currentSetpoint100)/100
             strCurrentSetpoint="%.1f" % currentSetpoint
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
-            Domoticz.Debug("trying to match changed setpoint to a scene: setpoint: '"+str(currentSetpoint100)+"' scene list: "+str(self.scenes))
             sceneNum = 1
             try:
                 #sceneNum = self.scenes.index(currentSetpoint100)
                 sceneNum = self.scenes[currentSetpoint100]
-            except ValueError:
+            except ValueError, IndexError:
                 Domoticz.Debug("no scene found for setpoint "+str(currentSetpoint100))
                 return
             #UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
