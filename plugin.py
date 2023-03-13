@@ -372,7 +372,7 @@ class BasePlugin:
             sceneNum = 1
             try:
                 #sceneNum = self.scenes.index(currentSetpoint100)
-                sceneNum = self.scenes(currentSetpoint100)
+                sceneNum = self.scenes[currentSetpoint100]
             except ValueError:
                 Domoticz.Debug("no scene found for setpoint "+str(currentSetpoint100))
                 return
