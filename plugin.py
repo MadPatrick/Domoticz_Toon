@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.25" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.26" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.25
+        version: 1.4.26
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -363,7 +363,7 @@ class BasePlugin:
             strcurrentInternalBoilerSetpoint="%.1f" % currentInternalBoilerSetpoint
             UpdateDevice(Unit=boilerSetPoint, nValue=0, sValue=strcurrentInternalBoilerSetpoint)
 
-        if 'currentSetpoint' in Response:
+        if 'currentSetpoint' in Response and len(self.scenes)>0:
             currentSetpoint100=int(Response['currentSetpoint'])
             Domoticz.Debug("trying to match changed setpoint to a scene: setpoint: '"+str(currentSetpoint100)+"' scene list: "+str(self.scenes))
             currentSetpoint=float(currentSetpoint100)/100
