@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.20" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.22" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.20
+        version: 1.4.22
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -231,10 +231,9 @@ class BasePlugin:
         #TSC        self.toonTSCinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         
         #fetch scenes config
+        self.scenes = []
         self.toonSceneinfo= Domoticz.Connection(Name="Toon Connection", Transport="TCP/IP", Protocol="HTTP", Address=Parameters["Address"], Port=Parameters["Port"])
         self.toonSceneinfo.Connect()
-
-        self.scenes = []
         
         #Domoticz.Log(json.dumps(Parameters))
         if self.useZwave:
@@ -370,11 +369,16 @@ class BasePlugin:
             currentSetpoint=float(currentSetpoint100)/100
             strCurrentSetpoint="%.1f" % currentSetpoint
             UpdateDevice(Unit=setTemp, nValue=0, sValue=strCurrentSetpoint)
+            Domoticz.Debug("trying to match changed setpoint to a scene: setpoint: '"+str(currentSetpoint100)+"' scene list: "+str(self.scenes))
+            sceneNum = 1
             try:
-                sceneNum = self.scenes.index(currentSetpoint100)
+                #sceneNum = self.scenes.index(currentSetpoint100)
+                sceneNum = self.scenes(currentSetpoint100)
             except ValueError:
+                Domoticz.Debug("no scene found for setpoint "+str(currentSetpoint100))
                 return
-            UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
+            #UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
+            UpdateDevice(Unit=scene, nValue=0, sValue=programs[sceneNum])
             self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=3"
             self.toonConnSetControl.Connect()
             
