@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.23" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.24" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.23
+        version: 1.4.24
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -378,7 +378,7 @@ class BasePlugin:
                 return
             #UpdateDevice(Unit=scene, nValue=0, sValue=programs[3])
             UpdateDevice(Unit=scene, nValue=0, sValue=programs[sceneNum])
-            self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState=3"
+            self.toonSetControlUrl="/happ_thermstat?action=changeSchemeState&state=2&temperatureState="+str(sceneNum)
             self.toonConnSetControl.Connect()
             
             # if strCurrentSetpoint == self.scene0:
