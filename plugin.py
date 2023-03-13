@@ -3,10 +3,10 @@
 # 
 #
 """
-<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.22" externallink="https://github.com/MadPatrick/domoticz_toon">
+<plugin key="RootedToonPlug" name="Toon Rooted" author="MadPatrick" version="1.4.23" externallink="https://github.com/MadPatrick/domoticz_toon">
     <description>
         <br/><h2>Domoticz Toon Rooted plugin</h2><br/>
-        version: 1.4.22
+        version: 1.4.23
         <br/>The configuration contains the following sections:
         <ul style="list-style-type:square">
             <li>Interfacing between Domoticz and a rooted Toon</li>
@@ -58,7 +58,6 @@
                 <option label="1m" value="60" default="true"/>
                 <option label="5m" value="300"/>
                 <option label="10m" value="600"/>
-                <option label="15m" value="900"/>
             </options>
         </param>
         <param field = "Mode3" label="P1 data" width="100px">
@@ -664,20 +663,20 @@ class BasePlugin:
     def onHeartbeat(self):
         Domoticz.Debug("onHeartbeat called")
 
-        if (self.toonConnThermostatInfo.Connected()==False):
+        if (self.toonConnThermostatInfo.Connected()==False and self.toonConnThermostatInfo.Connecting()==False ):
             self.toonConnThermostatInfo.Connect()
 
-        if (self.toonConnBoilerInfo.Connected()==False):
+        if (self.toonConnBoilerInfo.Connected()==False and self.toonConnBoilerInfo.Connecting()==False ):
             self.toonConnBoilerInfo.Connect()
 
         if self.useZwave:
-            if (self.toonConnZwaveInfo.Connected()==False):
+            if (self.toonConnZwaveInfo.Connected()==False and self.toonConnZwaveInfo.Connecting()==False ):
                 self.toonConnZwaveInfo.Connect()
             
         #TSC        if (self.toonTSCinfo.Connected()==False):	
         #TSC            self.toonTSCinfo.Connect()
             
-        if (self.toonSceneinfo.Connected()==False):
+        if (self.toonSceneinfo.Connected()==False and self.toonSceneinfo.Connecting()==False ):
             self.toonSceneinfo.Connect()
             
     def processScenesConfig(self, json_response):
